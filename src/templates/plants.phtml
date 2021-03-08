@@ -1,0 +1,99 @@
+
+
+<!DOCTYPE html>
+
+<head>
+  <div style="height: 120px">
+  </div>
+</head>
+
+<body>
+    <div id="inner" style="justify-content: center; display: flex; align-items: center;">
+        <form style="width: 500px; border: 1px solid black;" action="/downloadplants" method="post">
+          <div style="margin:auto; width: 300px;">
+            <h1 style="margin:auto; text-align:center;">PLANT REPORT</h1>
+          </div>
+          <br>
+          <div style="margin:auto; width: 300px;">
+            <label for="fname">拠点選択：</label>
+              <select name="plants" id="plants">
+                <optgroup label="Plants">
+                  <?php $val = 1; ?>
+                  <?php foreach ($plants as $plant) { ?>
+                    <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
+                  <?php } ?>
+                </optgroup>
+              </select>
+          </div>
+          <br>
+          <div style="margin:auto; width: 300px;">
+            <label>期間選択：</label>
+            <input style="width:80px" type="text" id="date_from" name="date_from" value="2016-02-02"> ~
+            <input style="width:80px" type="text" id="date_to" name="date_to" value="2021-02-02">
+          </div>
+          <br>
+          <div style="margin:auto; text-align: center; width: 300px;">
+            <input type="submit" value="ダウンロード">
+          </div>
+          <br>
+        </form>
+    </div>
+
+
+</body>
+
+<style>
+  #inner {
+    /* padding: 50px 0px 60px 170px; */
+    /* padding-left: 30px; */
+    /* padding-top: 30px; */
+    /* padding-bottom: 30px; */
+    /* display: table; */
+    /* margin: auto; */
+  }
+
+  .dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd}
+
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;}
+
+</style>
