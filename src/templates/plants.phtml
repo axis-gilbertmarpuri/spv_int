@@ -17,9 +17,13 @@
           <div style="margin:auto; width: 300px;">
             <label for="fname">拠点選択：</label>
               <select name="plants" id="plants">
-                <optgroup label="Plants">
-                  <?php $val = 1; ?>
+                <optgroup label="IGI">
                   <?php foreach ($plants as $plant) { ?>
+                    <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
+                  <?php } ?>
+                </optgroup>
+                <optgroup label="IEE">
+                  <?php foreach ($plantsNonG as $plant) { ?>
                     <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
                   <?php } ?>
                 </optgroup>

@@ -48,30 +48,67 @@ $app->post('/downloadplants', function () use ($app) {
 
 $app->get('/plants', function () use ($app) {
 
-   $cookieJar = CookieJar::fromArray(['cookie_name' => 'cookie_value'], 'https://dev-integration.sp-viewer.net');
-   $client = new \GuzzleHttp\Client(["base_uri" => "https://dev-integration.sp-viewer.net", 'cookies' => true]);
+    $cookieJar = CookieJar::fromArray(['cookie_name' => 'cookie_value'], 'https://dev-integration.sp-viewer.net');
+    $client = new \GuzzleHttp\Client(["base_uri" => "https://dev-integration.sp-viewer.net", 'cookies' => true]);
 
-   $params = [
-      "loginid" => "test",
-      "password" => "A1X2I3S4"
-   ];
+    $params = [
+        "loginid" => "test",
+        "password" => "A1X2I3S4"
+    ];
 
-   $response = $client->post("/api/v1/login", ['json' => $params, 'cookies' => $cookieJar]);
-   
-   $response = $client->get("/api/v1/plants", ['cookies' => $cookieJar]);
-   $plantJsonDecoded = json_decode($response->getBody(), true);
-   $plants = [];
+    // 笠岡		http://180.178.84.94/index.html
+    // 木城町		http://ichigo.delightviewer.jp/front/
+    // 世羅津口		http://202.229.41.205/icg/pg/spv/h2/solar/front/
+    // 世羅青水		http://202.229.41.205/icg/pg/spv/h3/solar/front/
+    // 芽室西士狩	http://202.229.41.205/icg/pg/spv/h4/solar/front/
+    // 常陸大宮		http://202.229.41.205/icg/pg/spv/h6/solar/front/
+    // 世羅下津田	No site
+    // 都城東霧島	No site
+    // えびの末永	No site
+    
+    $plantsToSkip = array ('笠岡', '木城町', '世羅津口', '世羅青水', '芽室西士狩', '常陸大宮', '世羅下津田', '都城東霧島', 'えびの末永');
+    // var_dump($plantt);
 
-   foreach ($plantJsonDecoded as $plant) {
-      $newPair = [ 
-         'plant_name' => $plant['plant_name'],
-         'plant_uri' => $plant['plant_uri'],
-      ];
-      array_push($plants, $newPair);
-   
-   }
+    $response = $client->post("/api/v1/login", ['json' => $params, 'cookies' => $cookieJar]);
+    
+    $response = $client->get("/api/v1/plants", ['cookies' => $cookieJar]);
+    $plantJsonDecoded = json_decode($response->getBody(), true);
+    $plants = [];
+    $plantsNonG = [];
 
-   $app->render('plants.phtml', ['plants' => $plants]);
+    foreach ($plantJsonDecoded as $plant) {
+        
+        if ($plant['plant_name'][0] == 'G') {
+            $newPair = [ 
+                'plant_name' => $plant['plant_name'],
+                'plant_uri' => $plant['plant_uri'],
+            ];
+            array_push($plants, $newPair);
+        }
+        else {
+            $matched = false;
+            foreach ($plantsToSkip as $plantToSkip) {
+                if ($plant['plant_name'] == $plantToSkip) {
+                    $matched = true;
+                    break;
+                }
+            }
+
+            if ($matched == false) {
+                $newPair = [ 
+                    'plant_name' => $plant['plant_name'],
+                    'plant_uri' => $plant['plant_uri'],
+                ];
+                array_push($plantsNonG, $newPair);
+            }
+        }
+    }
+
+    // echo "<pre>";
+    // var_dump($plants);
+    // var_dump($plantsNonG);
+
+    $app->render('plants.phtml', ['plants' => $plants, 'plantsNonG' => $plantsNonG]);
 })->setName('plants');
 
 
