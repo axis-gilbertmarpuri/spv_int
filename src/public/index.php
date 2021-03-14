@@ -26,7 +26,7 @@ function isValidDate ($date_from, $date_to) {
     $dateFromConverted = strtotime($date_from);
     $dateToConverted = strtotime($date_to);
 
-    $tempDate = explode('-', $date_from);
+    $tempDate = explode('/', $date_from);
 
     try {
 
@@ -34,11 +34,20 @@ function isValidDate ($date_from, $date_to) {
             return false;
         }
 
-        if (checkdate($tempDate[1], $tempDate[2], $tempDate[0]) == false){
+        // if (checkdate($tempDate[1], $tempDate[2], $tempDate[0]) == false){
+        //     var_dump(1);
+        //     return false;
+        // }
+        
+        if (checkdate($tempDate[0], $tempDate[1], $tempDate[2]) == false){
             return false;
         }
 
-        if (DateTime::createFromFormat('Y-m-d', '2021-02-21') != true) {
+        if (DateTime::createFromFormat('m/d/Y', $date_from) != true) {
+            return false;
+        }
+
+        if (DateTime::createFromFormat('m/d/Y', $date_to) != true) {
             return false;
         }
 

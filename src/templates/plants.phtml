@@ -1,10 +1,21 @@
-
-
 <!DOCTYPE html>
 
 <head>
   <div style="height: 120px">
   </div>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#date_from" ).datepicker();
+    $( "#date_to" ).datepicker();
+  } );
+  </script>
 </head>
 
 <body>
@@ -32,8 +43,10 @@
           <br>
           <div style="margin:auto; width: 300px;">
             <label>期間選択：</label>
-            <input style="width:80px" type="text" id="date_from" name="date_from" value="2016-02-02"> ~
-            <input style="width:80px" type="text" id="date_to" name="date_to" value="2021-02-02">
+            <!-- <input style="width:80px" type="text" id="date_from" name="date_from" value="2016-02-15"> ~ -->
+            <input style="width:80px" type="text" id="date_from" name="date_from"> ~ 
+            <input style="width:80px" type="text" id="date_to" name="date_to">
+            <!-- <input style="width:80px" type="text" id="date_to" name="date_to" value="2021-02-16"> -->
           </div>
           <br>
           <div style="margin:auto; text-align: center; width: 300px;">
