@@ -15,6 +15,16 @@
     $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
     $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
   } );
+
+  function fillDatePicker() {
+    var date = new Date();
+
+    var prevMonthStart = (new Date(date.getFullYear(), date.getMonth()-1,2)).toISOString().split('T')[0];
+    var prevMonthEnd = (new Date(date.getFullYear(), date.getMonth())).toISOString().split('T')[0];
+
+    $("#date_from").val(prevMonthStart);
+    $("#date_to").val(prevMonthEnd);
+  }
   </script>
 </head>
 
@@ -46,7 +56,7 @@
               <label>期間選択：</label>
               <input style="vertical-align:middle; width:80px" type="text" id="date_from" name="date_from"> ~ 
               <input style="vertical-align:middle; width:80px" type="text" id="date_to" name="date_to">
-              <input style="margin-left:20px; vertical-align:middle; " type="submit" value="前月" name="previous">
+              <input style="margin-left:20px; vertical-align:middle; " type="button" value="前月" name="previous" onclick=fillDatePicker()>
             </div>
             <br>
             <div style="margin:auto; text-align:center; width:300px;">
