@@ -26,7 +26,7 @@ function isValidDate ($date_from, $date_to) {
     $dateFromConverted = strtotime($date_from);
     $dateToConverted = strtotime($date_to);
 
-    $tempDate = explode('/', $date_from);
+    $tempDate = explode('-', $date_from);
 
     try {
 
@@ -34,20 +34,15 @@ function isValidDate ($date_from, $date_to) {
             return false;
         }
 
-        // if (checkdate($tempDate[1], $tempDate[2], $tempDate[0]) == false){
-        //     var_dump(1);
-        //     return false;
-        // }
-        
-        if (checkdate($tempDate[0], $tempDate[1], $tempDate[2]) == false){
+        if (checkdate($tempDate[1], $tempDate[2], $tempDate[0]) == false) {
             return false;
         }
 
-        if (DateTime::createFromFormat('m/d/Y', $date_from) != true) {
+        if (DateTime::createFromFormat('Y-m-d', $date_from) != true) {
             return false;
         }
 
-        if (DateTime::createFromFormat('m/d/Y', $date_to) != true) {
+        if (DateTime::createFromFormat('Y-m-d', $date_to) != true) {
             return false;
         }
 
@@ -63,36 +58,28 @@ $app->post('/downloadplants', function () use ($app) {
 
     $date_from = $request['date_from'];
     $date_to = $request['date_to'];
+
+    if (isset($_POST['previous'])) {
+        $date_from = (new DateTime("first day of last month"))->format('Y-m-d');
+        $date_to = (new DateTime("last day of last month"))->format('Y-m-d');
+    }
     $plant_uri = $request['plants'];
 
-    $val = 1;
+    $plant_uri_cleaned = substr($plant_uri, 0, -1);
+    $plant_name = explode('https://ichigo.sp-viewer.net/', $plant_uri_cleaned);
+
+    $csv_name = $plant_name[1];
 
     if (isValidDate($date_from, $date_to) != true) {
         $app->render('error.phtml');
         return;
     }
 
-    $download_report_link = $plant_uri."ac/download_measurement.php?freq=daily&target_date_ge=".$date_from."&target_date_lt=".$date_to."&format=csv";
+    $download_report_link = $plant_uri."ac/download_measurement.php?freq=daily&target_date_ge="
+                            .$date_from."&target_date_lt=".$date_to."&format=csv&table="
+                            .$csv_name."-".$date_from."-".$date_to;
     
     $app->redirect($download_report_link);
-    
-    // ob_start(); 
-    // $url = $download_report_link;
-
-    // while (ob_get_status()) 
-    // {
-    //     // if (ob_get_contents()) 
-    //     ob_end_clean();
-    // }
-
-    // //redirect for download
-    // header( "Location: $url" );
-    // $app->render('plant_download.phtml', [ 
-    //     'date_from' => $request['date_from'],
-    //     'date_to' => $request['date_to'],
-    //     'plant_uri' => $request['plants'],
-    // ]);
-
 })->setName('downloadplants');
 
 $app->get('/plants(/:stat)', function () use ($app) {
@@ -114,9 +101,9 @@ $app->get('/plants(/:stat)', function () use ($app) {
     // 世羅下津田	No site
     // 都城東霧島	No site
     // えびの末永	No site
+    // 米子泉	No site
     
     $plantsToSkip = array ('笠岡', '木城町', '世羅津口', '世羅青水', '芽室西士狩', '常陸大宮', '世羅下津田', '都城東霧島', 'えびの末永', '米子泉');
-    // var_dump($plantt);
 
     $response = $client->post("/api/v1/login", ['json' => $params, 'cookies' => $cookieJar]);
     
@@ -152,12 +139,6 @@ $app->get('/plants(/:stat)', function () use ($app) {
             }
         }
     }
-
-    // echo "<pre>";
-    // var_dump($plants);
-    // var_dump($plantsNonG);
-
-    // var_dump($stat);
 
     $app->render('plants.phtml', ['plants' => $plants, 'plantsNonG' => $plantsNonG]);
 })->setName('plants');
