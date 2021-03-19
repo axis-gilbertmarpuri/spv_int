@@ -58,11 +58,6 @@ $app->post('/downloadplants', function () use ($app) {
 
     $date_from = $request['date_from'];
     $date_to = $request['date_to'];
-
-    if (isset($_POST['previous'])) {
-        $date_from = (new DateTime("first day of last month"))->format('Y-m-d');
-        $date_to = (new DateTime("last day of last month"))->format('Y-m-d');
-    }
     $plant_uri = $request['plants'];
 
     $plant_uri_cleaned = substr($plant_uri, 0, -1);
