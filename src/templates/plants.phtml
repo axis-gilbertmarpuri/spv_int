@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 
 <head>
+  <link rel="icon" href="#">
   <div style="height: 120px">
   </div>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CSV Download Tool</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
   $( function() {
-    $( "#date_from" ).datepicker();
-    $( "#date_to" ).datepicker();
+    $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
   } );
   </script>
 </head>
 
 <body>
-    <div id="inner" style="justify-content: center; display: flex; align-items: center;">
-        <form style="width: 500px; border: 1px solid black;" action="/downloadplants" method="post">
-          <div style="margin:auto; width: 300px;">
-            <h1 style="margin:auto; text-align:center;">PLANT REPORT</h1>
-          </div>
-          <br>
-          <div style="margin:auto; width: 300px;">
-            <label for="fname">拠点選択：</label>
-              <select name="plants" id="plants">
-                <optgroup label="IGI">
-                  <?php foreach ($plants as $plant) { ?>
-                    <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
-                  <?php } ?>
-                </optgroup>
-                <optgroup label="IEE">
-                  <?php foreach ($plantsNonG as $plant) { ?>
-                    <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
-                  <?php } ?>
-                </optgroup>
-              </select>
-          </div>
-          <br>
-          <div style="margin:auto; width: 300px;">
-            <label>期間選択：</label>
-            <!-- <input style="width:80px" type="text" id="date_from" name="date_from" value="2016-02-15"> ~ -->
-            <input style="width:80px" type="text" id="date_from" name="date_from"> ~ 
-            <input style="width:80px" type="text" id="date_to" name="date_to">
-            <!-- <input style="width:80px" type="text" id="date_to" name="date_to" value="2021-02-16"> -->
-          </div>
-          <br>
-          <div style="margin:auto; text-align: center; width: 300px;">
-            <input type="submit" value="ダウンロード">
-          </div>
-          <br>
-        </form>
+    <div id="inner" style="justify-content:center; display:flex; align-items:center;">
+      <div style="border:1px solid black;">
+          <form style="width:500px; " action="/downloadplants" method="post">
+            <div style="margin:auto; width:300px;">
+              <h1 style="margin:auto; text-align:center;">PLANT REPORT</h1>
+            </div>
+            <br>
+            <div style="margin-left:70px; width:300px;">
+              <label for="fname">拠点選択：</label>
+                <select name="plants" id="plants">
+                  <optgroup label="IGI">
+                    <?php foreach ($plants as $plant) { ?>
+                      <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
+                    <?php } ?>
+                  </optgroup>
+                  <optgroup label="IEE">
+                    <?php foreach ($plantsNonG as $plant) { ?>
+                      <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
+                    <?php } ?>
+                  </optgroup>
+                </select>
+            </div>
+            <br>
+            <div style="margin-left:70px; width: 400px;">
+              <label>期間選択：</label>
+              <input style="vertical-align:middle; width:80px" type="text" id="date_from" name="date_from"> ~ 
+              <input style="vertical-align:middle; width:80px" type="text" id="date_to" name="date_to">
+              <input style="margin-left:20px; vertical-align:middle; " type="submit" value="前月" name="previous">
+            </div>
+            <br>
+            <div style="margin:auto; text-align:center; width:300px;">
+              <input type="submit" alt="wow" value="ダウンロード" name="current">
+            </div>
+            <br>
+          </form>
+      </div>
     </div>
 
 
