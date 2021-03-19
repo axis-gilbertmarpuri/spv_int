@@ -57,7 +57,9 @@ $app->post('/downloadplants', function () use ($app) {
     $request = $app->request->post();
 
     $date_from = $request['date_from'];
-    $date_to = $request['date_to'];
+    $date_to_raw = $request['date_to'];
+    $date_to = date('Y-m-d', strtotime("+1 day", strtotime($date_to_raw)));
+
     $plant_uri = $request['plants'];
 
     $plant_uri_cleaned = substr($plant_uri, 0, -1);
@@ -72,7 +74,7 @@ $app->post('/downloadplants', function () use ($app) {
 
     $download_report_link = $plant_uri."ac/download_measurement.php?freq=daily&target_date_ge="
                             .$date_from."&target_date_lt=".$date_to."&format=csv&table="
-                            .$csv_name."-".$date_from."-".$date_to;
+                            .$csv_name."-".$date_from."-".$date_to_raw;
     
     $app->redirect($download_report_link);
 })->setName('downloadplants');
