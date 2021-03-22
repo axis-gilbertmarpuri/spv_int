@@ -11,9 +11,12 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
+
   $( function() {
-    $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    // $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    // $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    $( "#dateFrom" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    $( "#dateTo" ).datepicker({ dateFormat: 'yy-mm-dd' });
   } );
 
   function fillDatePicker() {
@@ -22,9 +25,110 @@
     var prevMonthStart = (new Date(date.getFullYear(), date.getMonth()-1,2)).toISOString().split('T')[0];
     var prevMonthEnd = (new Date(date.getFullYear(), date.getMonth())).toISOString().split('T')[0];
 
-    $("#date_from").val(prevMonthStart);
-    $("#date_to").val(prevMonthEnd);
+    $("#dateFrom").val(prevMonthStart);
+    $("#dateTo").val(prevMonthEnd);
   }
+
+  function download_files(files) {
+    function download_next(i) {
+      if (i >= files.length) {
+        return;
+      }
+      var a = document.createElement('a');
+      a.href = files[i].download;
+      a.target = '_parent';
+      
+      if ('download' in a) {
+        a.download = files[i].filename;
+      }
+      
+      (document.body || document.documentElement).appendChild(a);
+      if (a.click) {
+        a.click(); //
+      } else {
+        $(a).click();
+      }
+      
+      a.parentNode.removeChild(a);
+      setTimeout(function() {
+        download_next(i + 1);
+      }, 1500);
+
+      console.log("downloading | ");
+      console.log("            | ");
+      console.log("            V ");
+      console.log(a.href);
+    }
+    download_next(0);
+  }
+  
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+ 
+
+  function downloadFiles(){
+    var plants = $('#plants').val();
+
+ 
+    var d = new Date();
+    var n = formatDate(d);
+
+    var dateFromUTCFormat = $('#dateFrom').datepicker('getDate');
+    var dateFromString = formatDate(dateFromUTCFormat);
+
+    var dateToUTCFormat = $('#dateTo').datepicker('getDate');
+    var dateToString = formatDate(dateToUTCFormat);
+
+
+    console.log(dateFromString);
+    console.log(dateToString);
+    console.log(plants.length);
+
+    var files = [];
+
+    for (var i = 0; i < plants.length; i++) {
+
+      var plantNameWithSlash = plants[i].replace('https://ichigo.sp-viewer.net/', '');
+      var plantName = plantNameWithSlash.replace('/', '');
+
+      files.push({
+        download: plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
+          dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "-" + dateToString,
+        filename: 'regs.txt'
+      })
+    }
+
+    console.log(files[0]);
+
+
+    // var links = [
+    //   "https://ichigo.sp-viewer.net/ichigo_nago/ac/download_measurement.php?freq=daily&target_date_ge=2021-02-01&target_date_lt=2021-02-03&format=csv&table=first",
+    //   "https://ichigo.sp-viewer.net/ichigo_nago/ac/download_measurement.php?freq=daily&target_date_ge=2021-01-01&target_date_lt=2021-01-03&format=csv&table=second",
+    // ];
+
+    // var files = [];
+
+    // for (var i = 0; i < links.length; i++) {
+    //   files.push({
+    //     download: links[i],
+    //     filename: 'regs.txt'
+    //   })
+    // }
+
+    download_files(files);
+  }
+
   </script>
 </head>
 
@@ -38,7 +142,7 @@
             <br>
             <div style="margin-left:70px; width:300px;">
               <label for="fname">拠点選択：</label>
-                <select name="plants" id="plants">
+                <select name="plants" id="plants" multiple>
                   <optgroup label="IGI">
                     <?php foreach ($plants as $plant) { ?>
                       <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
@@ -51,11 +155,19 @@
                   </optgroup>
                 </select>
             </div>
+            <div style="font-size:10px; margin:auto; margin-left:70px;">
+              <br>
+              Hold down the Ctrl (windows) or Command (Mac) button 
+              <br>
+              to select multiple options.
+            </div>
             <br>
             <div style="margin-left:70px; width: 400px;">
               <label>期間選択：</label>
-              <input style="vertical-align:middle; width:80px" type="text" id="date_from" name="date_from"> ~ 
-              <input style="vertical-align:middle; width:80px" type="text" id="date_to" name="date_to">
+              <!-- <input style="vertical-align:middle; width:80px" type="text" id="date_from" name="date_from"> ~ 
+              <input style="vertical-align:middle; width:80px" type="text" id="date_to" name="date_to"> -->
+              <input style="vertical-align:middle; width:80px" type="text" id="dateFrom" name="dateFrom"> ~ 
+              <input style="vertical-align:middle; width:80px" type="text" id="dateTo" name="dateTo">
               <input style="margin-left:20px; vertical-align:middle; " type="button" value="前月" name="previous" onclick=fillDatePicker()>
             </div>
             <br>
@@ -64,6 +176,7 @@
             </div>
             <br>
           </form>
+          <button onclick="downloadFiles()">CLICKME</button>
       </div>
     </div>
 
