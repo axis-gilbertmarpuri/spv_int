@@ -53,7 +53,7 @@
         a.parentNode.removeChild(a);
         setTimeout(function() {
           download_next(i + 1);
-        }, 3500);
+        }, 12000);
 
         // console.log("downloading | ");
         // console.log("            | ");
@@ -106,8 +106,16 @@
 
       for (var i = 0; i < plants.length; i++) {
 
-        var plantNameWithSlash = plants[i].replace('https://ichigo.sp-viewer.net/', '');
-        var plantName = plantNameWithSlash.replace('/', '');
+        var plantName;
+
+        if (plants[i].includes('https://ichigo.sp-viewer.net/')) {
+          var plantNameWithSlash = plants[i].replace('https://ichigo.sp-viewer.net/', '');
+          plantName = plantNameWithSlash.replace('/', '');
+        }
+        else if (plants[i].includes('http://219.127.165.30/')) {
+          plantName = "kure";
+        }
+
 
         files.push({
           download: plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
@@ -116,9 +124,10 @@
         })
       }
 
+      console.log(files);
+
       download_files(files);
     }
-  // });
   </script>
 </head>
 
