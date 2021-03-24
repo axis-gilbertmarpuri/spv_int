@@ -12,14 +12,15 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
 
-  $(document).ready(function(){
-    $( function() {
-      // $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
-      // $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
-      $( "#dateFrom" ).datepicker({ dateFormat: 'yy-mm-dd' });
-      $( "#dateTo" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    } );
-  });
+    $(document).ready(function(){
+      $( function() {
+        // $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        // $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#dateFrom" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#dateTo" ).datepicker({ dateFormat: 'yy-mm-dd' });
+      } );
+    });
+
     function fillDatePicker() {
       var date = new Date();
 
@@ -30,39 +31,35 @@
       $("#dateTo").val(prevMonthEnd);
     }
 
-    function download_files(files) {
-      function download_next(i) {
-        if (i >= files.length) {
-          return;
-        }
-        var a = document.createElement('a');
-        a.href = files[i].download;
-        a.target = '_parent';
+    // function download_files(files) {
+    //   function download_next(i) {
+    //     if (i >= files.length) {
+    //       return;
+    //     }
+    //     var a = document.createElement('a');
+    //     a.href = files[i].download;
+    //     a.target = '_parent';
         
-        if ('download' in a) {
-          a.download = files[i].filename;
-        }
+    //     if ('download' in a) {
+    //       a.download = files[i].filename;
+    //     }
         
-        (document.body || document.documentElement).appendChild(a);
-        if (a.click) {
-          a.click(); //
-        } else {
-          $(a).click();
-        }
+    //     (document.body || document.documentElement).appendChild(a);
+    //     if (a.click) {
+    //       a.click(); //
+    //     } else {
+    //       $(a).click();
+    //     }
         
-        a.parentNode.removeChild(a);
-        setTimeout(function() {
-          download_next(i + 1);
-        }, 12000);
+    //     a.parentNode.removeChild(a);
+    //     setTimeout(function() {
+    //       download_next(i + 1);
+    //     }, 12000);
 
-        // console.log("downloading | ");
-        // console.log("            | ");
-        // console.log("            V ");
-        // console.log(a.href);
-      }
-      download_next(0);
-    }
-    
+    //   }
+    //   download_next(0);
+    // }
+      
     function formatDate(date) {
       var d = new Date(date),
           month = '' + (d.getMonth() + 1),
@@ -76,8 +73,7 @@
 
       return [year, month, day].join('-');
     }
-  
-
+    
     function downloadFiles(){
       var plants = $('#plants').val();
 
@@ -102,7 +98,8 @@
       else
         $('#dateLabel').css("color", "black");
 
-      var files = [];
+      // var files = [];
+      var plantNames = [];
 
       for (var i = 0; i < plants.length; i++) {
 
@@ -116,18 +113,28 @@
           plantName = "kure";
         }
 
+        plantNames.push(plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
+            dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToString);
 
-        files.push({
-          download: plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
-            dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToString,
-          filename: 'regs.txt'
-        })
+
+        // files.push({
+        //   download: plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
+        //     dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToString,
+        //   filename: 'regs.txt'
+        // })
       }
 
-      console.log(files);
-
-      download_files(files);
+      downloadFilesSimultaneously(plantNames);
+      // download_files(files);
     }
+
+    function downloadFilesSimultaneously(files){
+      for (var i = 0; i < files.length; i++) {
+        console.log('downloading: ' + files[i]);
+        window.open(files[i], '_blank').focus();
+      }
+    }
+
   </script>
 </head>
 
