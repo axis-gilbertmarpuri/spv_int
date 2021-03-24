@@ -129,9 +129,16 @@
     }
 
     function downloadFilesSimultaneously(files){
+
+      
+
       for (var i = 0; i < files.length; i++) {
         console.log('downloading: ' + files[i]);
-        window.open(files[i], '_blank').focus();
+        Object.assign(document.createElement('a'), {
+          target: '_blank',
+          href: files[i],
+        }).click();
+        // window.open(files[i], '_blank').focus();
       }
     }
 
