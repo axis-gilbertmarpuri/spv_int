@@ -134,10 +134,13 @@
 
       for (var i = 0; i < files.length; i++) {
         console.log('downloading: ' + files[i]);
-        Object.assign(document.createElement('a'), {
-          target: '_blank',
-          href: files[i],
-        }).click();
+        const link = document.createElement('a');
+        link.href = files[i];
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
         // window.open(files[i], '_blank').focus();
       }
     }
