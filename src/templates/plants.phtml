@@ -31,6 +31,10 @@
       $("#dateTo").val(prevMonthEnd);
     }
 
+    function selectAllSites() {
+      $("#plants").attr("data-select", "true").find("option").prop("selected", true);
+    }
+
     // function download_files(files) {
     //   function download_next(i) {
     //     if (i >= files.length) {
@@ -161,14 +165,15 @@
                 <select name="plants" id="plants" multiple>
                   <optgroup label="IGI">
                     <?php foreach ($plants as $plant) { ?>
-                      <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
+                      <option value="<?= $plant['plant_uri']; ?>" selected><?= $plant['plant_name'] ?></option>
                     <?php } ?>
                   </optgroup>
                   <optgroup label="IEE">
                     <?php foreach ($plantsNonG as $plant) { ?>
-                      <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
+                      <option value="<?= $plant['plant_uri']; ?>" selected><?= $plant['plant_name'] ?></option>
                     <?php } ?>
                   </optgroup>
+                  <input style="margin-left:5px; vertical-align:middle; " type="button" value="全部" name="selectAll" onclick=selectAllSites()>
                 </select>
             </div>
             <div style="font-size:10px; margin:auto; margin-left:70px;">
@@ -190,6 +195,12 @@
             <div style="margin:auto; text-align:center; width:300px;">
               <!-- <input type="submit" alt="wow" value="ダウンロード" name="current"> -->
               <button onclick="downloadFiles()">ダウンロード</button>
+            </div>
+            <div style="font-size:10px; margin:auto; margin-left:110px;">
+              <br>
+              *複数のレポートをダウンロードできない場合は、
+              <br>
+              ブラウザのポップアップブロッカーを無効にしてください。
             </div>
             <br>
           <!-- </form> -->
