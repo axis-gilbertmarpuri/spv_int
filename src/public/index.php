@@ -157,7 +157,18 @@ $app->post('/plants(/:stat)', function () use ($app) {
         $username = $_POST['username'];
         $password = $_POST['password'];
         
-        if ($username == "ichigo" && $password == "Admin_15") {
+        if ($username == "test" && $password == "A1X2I3S4") {
+
+            $cookieJar = CookieJar::fromArray(['cookie_name' => 'cookie_value'], 'https://dev-integration.sp-viewer.net');
+            $client = new \GuzzleHttp\Client(["base_uri" => "https://dev-integration.sp-viewer.net", 'cookies' => true]);
+
+            $params = [
+                "loginid" => "test",
+                "password" => "A1X2I3S4"
+            ];
+
+        }
+        else if ($username == "ichigo" && $password == "Admin_15") {
             $cookieJar = CookieJar::fromArray(['cookie_name' => 'cookie_value'], 'https://dev-integration.sp-viewer.net');
             $client = new \GuzzleHttp\Client(["base_uri" => "https://dev-integration.sp-viewer.net", 'cookies' => true]);
 
@@ -166,18 +177,12 @@ $app->post('/plants(/:stat)', function () use ($app) {
                 "password" => "Admin_15"
             ];
 
-            // 笠岡		http://180.178.84.94/index.html
-            // 木城町		http://ichigo.delightviewer.jp/front/
-            // 世羅津口		http://202.229.41.205/icg/pg/spv/h2/solar/front/
-            // 世羅青水		http://202.229.41.205/icg/pg/spv/h3/solar/front/
-            // 芽室西士狩	http://202.229.41.205/icg/pg/spv/h4/solar/front/
-            // 常陸大宮		http://202.229.41.205/icg/pg/spv/h6/solar/front/
-            // 世羅下津田	No site
-            // 都城東霧島	No site
-            // えびの末永	No site
-            // 米子泉	No site
-            
-            $plantsToSkip = array ('笠岡', '木城町', '世羅津口', '世羅青水', '芽室西士狩', '常陸大宮', '世羅下津田', '都城東霧島', 'えびの末永', '米子泉');
+        }
+        else {
+            return $app->render('error.phtml');
+        }
+
+        $plantsToSkip = array ('笠岡', '木城町', '世羅津口', '世羅青水', '芽室西士狩', '常陸大宮', '世羅下津田', '都城東霧島', 'えびの末永', '米子泉');
 
             $response = $client->post("/api/v1/login", ['json' => $params, 'cookies' => $cookieJar]);
             
@@ -215,10 +220,6 @@ $app->post('/plants(/:stat)', function () use ($app) {
             }
 
             $app->render('plants.phtml', ['plants' => $plants, 'plantsNonG' => $plantsNonG]);
-        }
-        else {
-            return $app->render('error.phtml');
-        }
     } 
     else {
         $app->render('login.phtml');
