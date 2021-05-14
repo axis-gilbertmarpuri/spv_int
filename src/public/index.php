@@ -157,13 +157,13 @@ $app->post('/plants(/:stat)', function () use ($app) {
         $username = $_POST['username'];
         $password = $_POST['password'];
         
-        if ($username == "test" && $password == "A1X2I3S4") {
+        if ($username == "ichigo" && $password == "Admin_15") {
             $cookieJar = CookieJar::fromArray(['cookie_name' => 'cookie_value'], 'https://dev-integration.sp-viewer.net');
             $client = new \GuzzleHttp\Client(["base_uri" => "https://dev-integration.sp-viewer.net", 'cookies' => true]);
 
             $params = [
-                "loginid" => "test",
-                "password" => "A1X2I3S4"
+                "loginid" => "ichigo",
+                "password" => "Admin_15"
             ];
 
             // 笠岡		http://180.178.84.94/index.html
