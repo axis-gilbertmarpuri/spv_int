@@ -14,8 +14,6 @@
 
     $(document).ready(function(){
       $( function() {
-        // $( "#date_from" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        // $( "#date_to" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#dateFrom" ).datepicker({ dateFormat: 'yy-mm-dd' });
         $( "#dateTo" ).datepicker({ dateFormat: 'yy-mm-dd' });
       } );
@@ -34,35 +32,6 @@
     function selectAllSites() {
       $("#plants").attr("data-select", "true").find("option").prop("selected", true);
     }
-
-    // function download_files(files) {
-    //   function download_next(i) {
-    //     if (i >= files.length) {
-    //       return;
-    //     }
-    //     var a = document.createElement('a');
-    //     a.href = files[i].download;
-    //     a.target = '_parent';
-        
-    //     if ('download' in a) {
-    //       a.download = files[i].filename;
-    //     }
-        
-    //     (document.body || document.documentElement).appendChild(a);
-    //     if (a.click) {
-    //       a.click(); //
-    //     } else {
-    //       $(a).click();
-    //     }
-        
-    //     a.parentNode.removeChild(a);
-    //     setTimeout(function() {
-    //       download_next(i + 1);
-    //     }, 12000);
-
-    //   }
-    //   download_next(0);
-    // }
       
     function formatDate(date) {
       var d = new Date(date),
@@ -85,7 +54,10 @@
       var dateFromString = formatDate(dateFromUTCFormat);
 
       var dateToUTCFormat = $('#dateTo').datepicker('getDate');
-      var dateToString = formatDate(dateToUTCFormat);
+      var dateToStringForFilename = formatDate(dateToUTCFormat);
+      var newDateToUTCFormat = new Date(dateToUTCFormat);
+      newDateToUTCFormat.setDate(dateToUTCFormat.getDate() + 1);
+      var dateToString = formatDate(newDateToUTCFormat);
 
       if (!plants) {
         $('#plantLabel').css("color", "red");
@@ -102,7 +74,6 @@
       else
         $('#dateLabel').css("color", "black");
 
-      // var files = [];
       var plantNames = [];
 
       for (var i = 0; i < plants.length; i++) {
@@ -118,33 +89,16 @@
         }
 
         plantNames.push(plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
-            dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToString);
+            dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToStringForFilename);
 
-
-        // files.push({
-        //   download: plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
-        //     dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToString,
-        //   filename: 'regs.txt'
-        // })
       }
 
       downloadFilesSimultaneously(plantNames);
-      // download_files(files);
     }
 
     function downloadFilesSimultaneously(files){
-
-      
-
       for (var i = 0; i < files.length; i++) {
         console.log('downloading: ' + files[i]);
-        // const link = document.createElement('a');
-        // link.href = files[i];
-        // link.target = '_blank';
-        // document.body.appendChild(link);
-        // link.click();
-        // link.remove();
-
         window.open(files[i], '_blank').focus();
       }
     }
@@ -155,7 +109,6 @@
 <body>
     <div id="inner" style="justify-content:center; display:flex; align-items:center;">
       <div style="border:1px solid black;">
-          <!-- <form style="width:500px; " action="/downloadplants" method="post"> -->
             <div style="margin:auto; width:300px;">
               <h1 style="margin:auto; text-align:center;">PLANT REPORT</h1>
             </div>
@@ -185,15 +138,12 @@
             <br>
             <div style="margin-left:70px; width: 400px;">
               <label id="dateLabel">期間選択：</label>
-              <!-- <input style="vertical-align:middle; width:80px" type="text" id="date_from" name="date_from"> ~ 
-              <input style="vertical-align:middle; width:80px" type="text" id="date_to" name="date_to"> -->
               <input style="vertical-align:middle; width:80px" type="text" id="dateFrom" name="dateFrom"> ~ 
               <input style="vertical-align:middle; width:80px" type="text" id="dateTo" name="dateTo">
               <input style="margin-left:20px; vertical-align:middle; " type="button" value="前月" name="previous" onclick=fillDatePicker()>
             </div>
             <br>
             <div style="margin:auto; text-align:center; width:300px;">
-              <!-- <input type="submit" alt="wow" value="ダウンロード" name="current"> -->
               <button onclick="downloadFiles()">ダウンロード</button>
             </div>
             <div style="font-size:10px; margin:auto; margin-left:110px;">
@@ -203,8 +153,6 @@
               ブラウザのポップアップブロッカーを無効にしてください。
             </div>
             <br>
-          <!-- </form> -->
-          <!-- <button onclick="downloadFiles()">CLICKME</button> -->
       </div>
     </div>
 
