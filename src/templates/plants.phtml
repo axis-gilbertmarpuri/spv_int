@@ -98,10 +98,18 @@
 
     function downloadFilesSimultaneously(files){
       for (var i = 0; i < files.length; i++) {
-        console.log('downloading: ' + files[i]);
-        window.open(files[i], '_blank').focus();
+        var f = files[i];
+        if (files[i].includes('http://219.127.165.30/')) {
+          var url = files[i];
+          setTimeout(function(){
+            window.open(url, '_blank').focus();
+          },5000, url); 
+        }
+        else {
+          window.open(files[i], '_blank').focus();
+        }
       }
-    }
+}
 
   </script>
 </head>
