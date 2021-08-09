@@ -8,8 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CSV Download Tool</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
 
     $(document).ready(function(){
@@ -27,10 +31,6 @@
 
       $("#dateFrom").val(prevMonthStart);
       $("#dateTo").val(prevMonthEnd);
-    }
-
-    function selectAllSites() {
-      $("#plants").attr("data-select", "true").find("option").prop("selected", true);
     }
       
     function formatDate(date) {
@@ -54,10 +54,7 @@
       var dateFromString = formatDate(dateFromUTCFormat);
 
       var dateToUTCFormat = $('#dateTo').datepicker('getDate');
-      var dateToStringForFilename = formatDate(dateToUTCFormat);
-      var newDateToUTCFormat = new Date(dateToUTCFormat);
-      newDateToUTCFormat.setDate(dateToUTCFormat.getDate() + 1);
-      var dateToString = formatDate(newDateToUTCFormat);
+      var dateToString = formatDate(dateToUTCFormat);
 
       if (!plants) {
         $('#plantLabel').css("color", "red");
@@ -89,32 +86,25 @@
         }
 
         plantNames.push(plants[i] + "ac/download_measurement.php?freq=daily&target_date_ge=" + dateFromString + "&target_date_lt=" +
-            dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToStringForFilename);
-
+            dateToString + "&format=csv&table=" + plantName + "_" + dateFromString + "_" + dateToString);
       }
 
       downloadFilesSimultaneously(plantNames);
+      // download_files(files);
     }
 
     function downloadFilesSimultaneously(files){
       for (var i = 0; i < files.length; i++) {
-        var f = files[i];
-        if (files[i].includes('http://219.127.165.30/')) {
-          var url = files[i];
-          setTimeout(function(){
-            window.open(url, '_blank').focus();
-          },5000, url); 
-        }
-        else {
-          window.open(files[i], '_blank').focus();
-        }
+        console.log('downloading: ' + files[i]);
+        window.open(files[i], '_blank').focus();
       }
-}
+    }
 
   </script>
 </head>
 
 <body>
+
     <div id="inner" style="justify-content:center; display:flex; align-items:center;">
       <div style="border:1px solid black;">
             <div style="margin:auto; width:300px;">
@@ -126,15 +116,14 @@
                 <select name="plants" id="plants" multiple>
                   <optgroup label="IGI">
                     <?php foreach ($plants as $plant) { ?>
-                      <option value="<?= $plant['plant_uri']; ?>" selected><?= $plant['plant_name'] ?></option>
+                      <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
                     <?php } ?>
                   </optgroup>
                   <optgroup label="IEE">
                     <?php foreach ($plantsNonG as $plant) { ?>
-                      <option value="<?= $plant['plant_uri']; ?>" selected><?= $plant['plant_name'] ?></option>
+                      <option value="<?= $plant['plant_uri']; ?>"><?= $plant['plant_name'] ?></option>
                     <?php } ?>
                   </optgroup>
-                  <input style="margin-left:5px; vertical-align:middle; " type="button" value="全部" name="selectAll" onclick=selectAllSites()>
                 </select>
             </div>
             <div style="font-size:10px; margin:auto; margin-left:70px;">
@@ -154,12 +143,6 @@
             <div style="margin:auto; text-align:center; width:300px;">
               <button onclick="downloadFiles()">ダウンロード</button>
             </div>
-            <div style="font-size:10px; margin:auto; margin-left:110px;">
-              <br>
-              *複数のレポートをダウンロードできない場合は、
-              <br>
-              ブラウザのポップアップブロッカーを無効にしてください。
-            </div>
             <br>
       </div>
     </div>
@@ -169,12 +152,8 @@
 
 <style>
   #inner {
-    /* padding: 50px 0px 60px 170px; */
-    /* padding-left: 30px; */
-    /* padding-top: 30px; */
-    /* padding-bottom: 30px; */
-    /* display: table; */
-    /* margin: auto; */
+    /* opacity:0; */
+    margin-top: 0px;
   }
 
   .dropbtn {
