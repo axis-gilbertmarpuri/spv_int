@@ -101,6 +101,7 @@
         var f = files[i];
         if (files[i].includes('http://219.127.165.30/')) {
           var url = files[i];
+          console.log(url);
           setTimeout(function(){
             window.open(url, '_blank').focus();
           },5000, url); 
