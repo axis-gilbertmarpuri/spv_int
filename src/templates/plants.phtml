@@ -100,20 +100,35 @@
       for (var i = 0; i < files.length; i++) {
         var f = files[i];
         if (files[i].includes('http://219.127.165.30/')) {
+          var urlToSend = files[i];
+          window.open(files[i]);
+          // setTimeout(function(){
+          //   alert(5);
+          // },15000); 
 
-          const link = document.createElement('a');
-          link.href = files[i];
-          link.target = '_blank';
-          document.body.appendChild(link);
+          // const link = document.createElement('a');
+          // link.href = files[i];
+          // link.target = '_blank';
+          // document.body.appendChild(link);
+          // link.click();   
+          // link.remove(); 
          
           // var url = files[i];
-          setTimeout(function(){
-            link.click();   
-            link.remove(); 
-            // window.open(url, '_blank').focus();
-          },5000); 
+          // setTimeout(function(){
+          //   // window.open(url, '_blank').focus();
+          // },5000); 
 
+          // req.open("GET", urlToSend, true);
+          // req.responseType = "blob";
+          // req.onload = function (event) {
+              // var fileName = "fileName"; //if you have the fileName header available
+              // var link=document.createElement('a');
+              // link.href=window.URL.createObjectURL(urlToSend);
+              // link.download=fileName;
+              // link.click();
+          // };
 
+          // req.send();
 
         }
         else {
