@@ -101,36 +101,7 @@
         var f = files[i];
         if (files[i].includes('http://219.127.165.30/')) {
           var urlToSend = files[i];
-          // setTimeout(function(){
-          //   console.log(urlToSend);
-          //   window.open(urlToSend);
-          // },5000, urlToSend); 
-
           window.location.assign(urlToSend);
-
-          // const link = document.createElement('a');
-          // link.href = files[i];
-          // link.target = '_blank';
-          // document.body.appendChild(link);
-          // link.click();   
-          // link.remove(); 
-         
-          // var url = files[i];
-          // setTimeout(function(){
-          //   // window.open(url, '_blank').focus();
-          // },5000); 
-
-          // req.open("GET", urlToSend, true);
-          // req.responseType = "blob";
-          // req.onload = function (event) {
-              // var fileName = "fileName"; //if you have the fileName header available
-              // var link=document.createElement('a');
-              // link.href=window.URL.createObjectURL(urlToSend);
-              // link.download=fileName;
-              // link.click();
-          // };
-
-
         }
         else {
           window.open(files[i], '_blank').focus();
