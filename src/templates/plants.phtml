@@ -100,10 +100,21 @@
       for (var i = 0; i < files.length; i++) {
         var f = files[i];
         if (files[i].includes('http://219.127.165.30/')) {
-          var url = files[i];
+
+          const link = document.createElement('a');
+          link.href = files[i];
+          link.target = '_blank';
+          document.body.appendChild(link);
+         
+          // var url = files[i];
           setTimeout(function(){
-            window.open(url, '_blank').focus();
-          },5000, url); 
+            link.click();   
+            link.remove(); 
+            // window.open(url, '_blank').focus();
+          },5000); 
+
+
+
         }
         else {
           window.open(files[i], '_blank').focus();
