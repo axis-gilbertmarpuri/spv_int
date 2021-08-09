@@ -101,10 +101,12 @@
         var f = files[i];
         if (files[i].includes('http://219.127.165.30/')) {
           var urlToSend = files[i];
-          setTimeout(function(){
-            console.log(urlToSend);
-            window.open(urlToSend);
-          },15000, urlToSend); 
+          // setTimeout(function(){
+          //   console.log(urlToSend);
+          //   window.open(urlToSend);
+          // },5000, urlToSend); 
+
+          window.location.assign(urlToSend);
 
           // const link = document.createElement('a');
           // link.href = files[i];
